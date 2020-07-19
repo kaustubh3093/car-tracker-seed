@@ -14,7 +14,7 @@ public class Vehicle {
 	private String model;
 	private int year;
 	private int redlineRpm;
-	private int maxFuelVolume;
+	private float maxFuelVolume;
 	private Date lastServiceDate;
 	
 	/**
@@ -48,7 +48,7 @@ public class Vehicle {
 	 * @param maxFuelVolume
 	 * @param date
 	 */
-	public Vehicle(String vin, String make, String model, int year, int redlineRpm, int maxFuelVolume, Date lastServiceDate) {
+	public Vehicle(String vin, String make, String model, int year, int redlineRpm, float maxFuelVolume, Date lastServiceDate) {
 		this.vin = vin;
 		this.make = make;
 		this.model = model;
@@ -131,14 +131,14 @@ public class Vehicle {
 	/**
 	 * @return the maxFuelVolume
 	 */
-	public int getMaxFuelVolume() {
+	public float getMaxFuelVolume() {
 		return maxFuelVolume;
 	}
 
 	/**
 	 * @param maxFuelVolume the maxFuelVolume to set
 	 */
-	public void setMaxFuelVolume(int maxFuelVolume) {
+	public void setMaxFuelVolume(float maxFuelVolume) {
 		this.maxFuelVolume = maxFuelVolume;
 	}
 

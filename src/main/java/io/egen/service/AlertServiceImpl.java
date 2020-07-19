@@ -1,6 +1,5 @@
 package io.egen.service;
 
-import java.util.Date;
 import java.util.Optional;
 
 import org.jeasy.rules.api.Facts;
@@ -16,15 +15,15 @@ import io.egen.entity.Vehicle;
 import io.egen.exception.VehicleNotFoundException;
 import io.egen.repository.AlertRepository;
 import io.egen.repository.VehicleRepository;
+import io.egen.rules.EngineRule;
 import io.egen.rules.HighPriorityRule;
+import io.egen.rules.MediumPriorityRule;
+import io.egen.rules.TirePressureRule;
 
 @Service
 public class AlertServiceImpl implements AlertService{
 
-	private String message;
-	private String priority;
 	private String vin;
-	private Date alertTime;
 	
 	private Rules rules;
 	
@@ -46,19 +45,32 @@ public class AlertServiceImpl implements AlertService{
 		
 		
 		rules = new Rules();
+		
+		// Declare an instance of all the rule class
 		HighPriorityRule highPriorityRule = new HighPriorityRule(); 
+		MediumPriorityRule mediumPriorityRule = new MediumPriorityRule();
+		TirePressureRule tirePressureRule = new TirePressureRule();
+		EngineRule engineRule = new EngineRule();
+		
+		// Register instances to the rule
 		rules.register(highPriorityRule);
+		rules.register(mediumPriorityRule);
+		rules.register(tirePressureRule);
+		rules.register(engineRule);
+		
 		facts = new Facts();
+		facts.put("high-priority", new int[] {reading.getEngineRpm() ,existingVehicle.get().getRedlineRpm()});
+		facts.put("medium-priority", new float[] {reading.getFuelVolume(), existingVehicle.get().getMaxFuelVolume()});
+		facts.put("low-priority-tire", new int[] {reading.getTires().getFrontLeft(), reading.getTires().getFrontRight(), reading.getTires().getRearLeft(), reading.getTires().getRearRight()});
+		facts.put("low-priority-engine", new boolean[] {reading.isEngineCoolantLow(), reading.isCheckEngineLightOn()});
+		
+		RulesEngine rulesEngine = new DefaultRulesEngine();
+		rulesEngine.fire(rules, facts);
 		
 		/**
 		 * Check If Priority is High: If engine RPM greater than Red line RPM
 		 * Create Entry in alert table
 		 */
-		facts.put("high-priority", reading.getEngineRpm() > existingVehicle.get().getRedlineRpm());
-		
-		RulesEngine rulesEngine = new DefaultRulesEngine();
-		rulesEngine.fire(rules, facts);
-		
 		if(highPriorityRule.getPriority() != null && highPriorityRule.getPriority().equals("HIGH")) {
 			Alert alert = new Alert();
 			alert.setVin(vin);
@@ -68,14 +80,51 @@ public class AlertServiceImpl implements AlertService{
 			alertRepository.save(alert);
 		}
 		
-		/*Calling for medium alert rule*/
-		if(reading.getFuelVolume() < 0.1 * existingVehicle.get().getMaxFuelVolume())
-			System.out.println("The priority is Medium with fuel volume less than 10% of max fuel volume");
+		/**
+		 * Check If Priority is Medium: IF fuel is less than 10 percentage of the fuel limit
+		 * Create Entry in alert table
+		 */
+		if(mediumPriorityRule.getPriority() != null && mediumPriorityRule.getPriority().equals("MEDIUM")) {
+			Alert alert = new Alert();
+			alert.setVin(vin);
+			alert.setMessage(mediumPriorityRule.getMessage());
+			alert.setPriority(mediumPriorityRule.getPriority());
+			alert.setAlertTime(reading.getTimestamp());
+			alertRepository.save(alert);
+		}
+		
+		/**
+		 * Check If Priority is Low: If Tire pressure is not in the limit
+		 * Create Entry in alert table
+		 */
+		if(tirePressureRule.getPriority() != null && tirePressureRule.getPriority().equals("LOW")) {
+			Alert alert = new Alert();
+			alert.setVin(vin);
+			alert.setMessage(tirePressureRule.getMessage());
+			alert.setPriority(tirePressureRule.getPriority());
+			alert.setAlertTime(reading.getTimestamp());
+			alertRepository.save(alert);
+		}
+		
+		/**
+		 * Check If Priority is Low: If Engine Coolant low or Engine light On
+		 * Create Entry in alert table
+		 */
+		if(engineRule.getPriority() != null && engineRule.getPriority().equals("LOW")) {
+			Alert alert = new Alert();
+			alert.setVin(vin);
+			alert.setMessage(engineRule.getMessage());
+			alert.setPriority(engineRule.getPriority());
+			alert.setAlertTime(reading.getTimestamp());
+			alertRepository.save(alert);
+		}
 		
 		
-		/*Calling for low alert rule*/
-		if(reading.isCheckEngineLightOn() || reading.isEngineCoolantLow())
-			System.out.println("The priorty is low and either light on or engine coolent low");
+		// Remove instances from the rule
+		rules.unregister(highPriorityRule);
+		rules.unregister(mediumPriorityRule);
+		rules.unregister(tirePressureRule);
+		rules.unregister(engineRule);
 	}
 
 }
