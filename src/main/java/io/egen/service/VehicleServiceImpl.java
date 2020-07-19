@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.egen.entity.Vehicle;
 import io.egen.repository.VehicleRepository;
@@ -19,6 +18,11 @@ public class VehicleServiceImpl implements VehicleService {
 	public List<Vehicle> update(List<Vehicle> vehicle) {
 		vehicle.forEach(v -> vehicleRepository.save(v));
 		return vehicle;
+	}
+
+	@Override
+	public List<Vehicle> findAll() {
+		return (List<Vehicle>) vehicleRepository.findAll();
 	}
 
 }

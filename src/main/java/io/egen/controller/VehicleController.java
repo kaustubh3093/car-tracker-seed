@@ -22,4 +22,10 @@ public class VehicleController {
 	public List<Vehicle> update(@RequestBody List<Vehicle> vehicle) {
         return vehicleService.update(vehicle);
     }
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public List<Vehicle> findAll(){
+		return vehicleService.findAll();
+	}
+	
 }
