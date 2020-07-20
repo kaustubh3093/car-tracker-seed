@@ -163,7 +163,7 @@ public class AlertServiceImpl implements AlertService{
 		calender.set(Calendar.HOUR, -2);
 		
 		Date date = calender.getTime();
-		System.out.println("\n"+date+"\n");
+		
 		Optional<List<Alert>> highAlert = alertRepository.findHighAlertWithInLastTwoHour("HIGH",date);
 		
 		if(!highAlert.isPresent()) {
