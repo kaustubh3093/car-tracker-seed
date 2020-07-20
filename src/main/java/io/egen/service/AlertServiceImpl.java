@@ -1,5 +1,8 @@
 package io.egen.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.jeasy.rules.api.Facts;
@@ -8,10 +11,13 @@ import org.jeasy.rules.api.RulesEngine;
 import org.jeasy.rules.core.DefaultRulesEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.egen.entity.Alert;
 import io.egen.entity.Reading;
 import io.egen.entity.Vehicle;
+import io.egen.exception.NoPreviousAlertException;
+import io.egen.exception.NoPreviousHIGHAlertException;
 import io.egen.exception.VehicleNotFoundException;
 import io.egen.repository.AlertRepository;
 import io.egen.repository.VehicleRepository;
@@ -35,6 +41,7 @@ public class AlertServiceImpl implements AlertService{
 	private AlertRepository alertRepository;
 	
 	@Override
+	@Transactional
 	public void create(Reading reading) {
 		
 		vin = reading.getVin();
@@ -42,7 +49,8 @@ public class AlertServiceImpl implements AlertService{
 		if (!existingVehicle.isPresent()) {
             throw new VehicleNotFoundException("Vehicle with id " + vin + " doesn't exist.");
         }
-		
+		String make = existingVehicle.get().getMake();
+		String model = existingVehicle.get().getModel();
 		
 		rules = new Rules();
 		
@@ -77,6 +85,8 @@ public class AlertServiceImpl implements AlertService{
 			alert.setMessage(highPriorityRule.getMessage());
 			alert.setPriority(highPriorityRule.getPriority());
 			alert.setAlertTime(reading.getTimestamp());
+			alert.setMake(make);
+			alert.setModel(model);
 			alertRepository.save(alert);
 		}
 		
@@ -90,6 +100,8 @@ public class AlertServiceImpl implements AlertService{
 			alert.setMessage(mediumPriorityRule.getMessage());
 			alert.setPriority(mediumPriorityRule.getPriority());
 			alert.setAlertTime(reading.getTimestamp());
+			alert.setMake(make);
+			alert.setModel(model);
 			alertRepository.save(alert);
 		}
 		
@@ -103,6 +115,8 @@ public class AlertServiceImpl implements AlertService{
 			alert.setMessage(tirePressureRule.getMessage());
 			alert.setPriority(tirePressureRule.getPriority());
 			alert.setAlertTime(reading.getTimestamp());
+			alert.setMake(make);
+			alert.setModel(model);
 			alertRepository.save(alert);
 		}
 		
@@ -116,6 +130,8 @@ public class AlertServiceImpl implements AlertService{
 			alert.setMessage(engineRule.getMessage());
 			alert.setPriority(engineRule.getPriority());
 			alert.setAlertTime(reading.getTimestamp());
+			alert.setMake(make);
+			alert.setModel(model);
 			alertRepository.save(alert);
 		}
 		
@@ -125,6 +141,36 @@ public class AlertServiceImpl implements AlertService{
 		rules.unregister(mediumPriorityRule);
 		rules.unregister(tirePressureRule);
 		rules.unregister(engineRule);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Alert> findByVID(String vinID) {
+		
+		Optional<List<Alert>> totalAlert = alertRepository.findByVin(vinID);
+		
+		if(!totalAlert.isPresent()) {
+			throw new NoPreviousAlertException("Vehicle with id " + vinID + " has no previous alerts!");
+		}
+		
+		return totalAlert.get();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Alert> findHighAlerts() {
+		Calendar calender = Calendar.getInstance();
+		calender.set(Calendar.HOUR, -2);
+		
+		Date date = calender.getTime();
+		System.out.println("\n"+date+"\n");
+		Optional<List<Alert>> highAlert = alertRepository.findHighAlertWithInLastTwoHour("HIGH",date);
+		
+		if(!highAlert.isPresent()) {
+			throw new NoPreviousHIGHAlertException("No vehicle with priority HIGH in last 2 hours!");
+		}
+		
+		return highAlert.get();
 	}
 
 }

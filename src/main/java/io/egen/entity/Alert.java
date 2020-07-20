@@ -16,23 +16,31 @@ public class Alert {
 	private String message;
 	private String priority;
 	private Date alertTime;
+	private String make;
+	private String model;
 	
 	public Alert() {
 		alertID = UUID.randomUUID().toString();
 	}
 
+	
 	/**
-	 * @param vin
+	 * @param alertID
 	 * @param message
 	 * @param priority
 	 * @param alertTime
+	 * @param make
+	 * @param model
 	 */
-	public Alert(String vin, String message, String priority, Date alertTime) {
-		this.vin = vin;
+	public Alert(String alertID, String message, String priority, Date alertTime, String make, String model) {
+		this.alertID = alertID;
 		this.message = message;
 		this.priority = priority;
 		this.alertTime = alertTime;
+		this.make = make;
+		this.model = model;
 	}
+
 
 	/**
 	 * @return the alertID
@@ -104,11 +112,42 @@ public class Alert {
 		this.alertTime = alertTime;
 	}
 
+	
+	/**
+	 * @return the make
+	 */
+	public String getMake() {
+		return make;
+	}
+
+	/**
+	 * @param make the make to set
+	 */
+	public void setMake(String make) {
+		this.make = make;
+	}
+
+	/**
+	 * @return the model
+	 */
+	public String getModel() {
+		return model;
+	}
+
+	/**
+	 * @param model the model to set
+	 */
+	public void setModel(String model) {
+		this.model = model;
+	}
+
 	@Override
 	public String toString() {
 		return "Alert [alertID=" + alertID + ", vin=" + vin + ", message=" + message + ", priority=" + priority
-				+ ", alertTime=" + alertTime + "]";
+				+ ", alertTime=" + alertTime + ", make=" + make + ", model=" + model + "]";
 	}
+
+	
 	
 	
 }

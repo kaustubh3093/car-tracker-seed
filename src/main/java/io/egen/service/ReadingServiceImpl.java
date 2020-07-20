@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.egen.entity.Reading;
 import io.egen.entity.Vehicle;
@@ -25,6 +26,7 @@ public class ReadingServiceImpl implements ReadingService{
 	 * vinID of Reading object
 	 */
 	@Override
+	@Transactional
 	public Reading create(Reading reading) {
 		String vinID = reading.getVin();
 		Optional<Vehicle> existingVehicle = vehicleRepository.findById(vinID);
