@@ -1,6 +1,6 @@
 package io.egen.controller;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +63,11 @@ public class VehicleController {
 				@ApiResponse(code = 404, message = "No vehicle entry in the database")
 	})
 	public List<Geolocation> getGeolocation(@PathVariable("vinID") String vinID){
-		return readingService.getGeolocation(vinID);
+		Calendar calender = Calendar.getInstance();
+		calender.set(Calendar.MINUTE, -270);
+		
+		Date date = calender.getTime();
+		return readingService.getGeolocation(vinID, date);
 	}
 	
 }

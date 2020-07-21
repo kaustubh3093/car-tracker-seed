@@ -44,11 +44,7 @@ public class ReadingServiceImpl implements ReadingService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Geolocation> getGeolocation(String vinID) {
-		Calendar calender = Calendar.getInstance();
-		calender.set(Calendar.MINUTE, -270);
-		
-		Date date = calender.getTime();
+	public List<Geolocation> getGeolocation(String vinID, Date date) {
 		
 		Optional<List<Reading>> vehicleReading = readingRepository.findVehicleGeolocationWithinLastThirtyMin(vinID, date);
 		

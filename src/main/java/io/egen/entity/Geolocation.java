@@ -8,6 +8,9 @@ public class Geolocation {
 	private double longitude;
 	private Date timestamp;
 	
+	public Geolocation() {
+		
+	}
 	/**
 	 * @param latitude
 	 * @param longitude
