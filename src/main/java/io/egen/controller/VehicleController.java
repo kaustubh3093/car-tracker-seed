@@ -64,7 +64,7 @@ public class VehicleController {
 	})
 	public List<Geolocation> getGeolocation(@PathVariable("vinID") String vinID){
 		Calendar calender = Calendar.getInstance();
-		calender.set(Calendar.MINUTE, -270);
+		calender.set(Calendar.MINUTE, -30);
 		
 		Date date = calender.getTime();
 		return readingService.getGeolocation(vinID, date);
