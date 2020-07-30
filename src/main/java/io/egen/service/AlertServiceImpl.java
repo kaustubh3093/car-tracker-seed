@@ -1,5 +1,6 @@
 package io.egen.service;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.egen.amazon.AmazonSESSample;
 import io.egen.entity.Alert;
 import io.egen.entity.Reading;
 import io.egen.entity.Vehicle;
@@ -88,6 +90,11 @@ public class AlertServiceImpl implements AlertService{
 			alert.setMake(make);
 			alert.setModel(model);
 			alertRepository.save(alert);
+			try {
+			 AmazonSESSample.sendEmail();
+			} catch (IOException e) {
+			 e.printStackTrace();
+			}
 		}
 		
 		/**
