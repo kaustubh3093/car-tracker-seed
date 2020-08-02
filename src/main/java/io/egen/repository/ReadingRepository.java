@@ -7,11 +7,12 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import io.egen.entity.Alert;
 import io.egen.entity.Reading;
 
-
+@Repository
 public interface ReadingRepository extends CrudRepository<Reading, String>{
 
 	Optional<List<Reading>> findByVin(String vinID);

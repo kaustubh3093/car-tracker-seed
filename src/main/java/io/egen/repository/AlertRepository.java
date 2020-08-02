@@ -7,9 +7,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import io.egen.entity.Alert;
 
+@Repository
 public interface AlertRepository extends CrudRepository<Alert, String>{
 
 	Optional<List<Alert>> findByVin(String vinID);
