@@ -15,9 +15,7 @@ node {
         DOCKER_IMAGE_VERSION = "${BUILD_NUMBER}-${GIT_COMMIT}"
     }
 
-	stage("Install software"){
-		sh "apt-get -y update && apt-get -y install procps"
-	}
+	
 	stage("mvn clean") {
         sh "mvn clean"
     }
