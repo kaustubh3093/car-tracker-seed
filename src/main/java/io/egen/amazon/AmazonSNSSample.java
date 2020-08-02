@@ -1,6 +1,5 @@
 package io.egen.amazon;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.amazonaws.services.sns.AmazonSNSClient;

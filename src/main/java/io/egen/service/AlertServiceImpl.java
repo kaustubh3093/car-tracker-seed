@@ -3,9 +3,7 @@ package io.egen.service;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.jeasy.rules.api.Facts;
@@ -15,9 +13,6 @@ import org.jeasy.rules.core.DefaultRulesEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.services.sns.model.MessageAttributeValue;
 
 import io.egen.amazon.AmazonSESSample;
 import io.egen.amazon.AmazonSNSSample;
