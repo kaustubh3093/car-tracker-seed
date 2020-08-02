@@ -101,12 +101,12 @@ public class AlertServiceImpl implements AlertService{
 			} catch (IOException e) {
 			 e.printStackTrace();
 			}
-			AmazonSNSClient snsClient = new AmazonSNSClient();
-		    String message = "High Alert Alarm: Your Engine RPM is exceeding the limit";
-		    String phoneNumber = "+16073041316";
-		    Map<String, MessageAttributeValue> smsAttributes = 
-		            new HashMap<String, MessageAttributeValue>();
-		    MessageAttributeValue messageAtrValue = new MessageAttributeValue();
+			//AmazonSNSClient snsClient = new AmazonSNSClient();
+		    //String message = "High Alert Alarm: Your Engine RPM is exceeding the limit";
+		    //String phoneNumber = "+16073041316";
+		    //Map<String, MessageAttributeValue> smsAttributes = 
+		    //        new HashMap<String, MessageAttributeValue>();
+		    //MessageAttributeValue messageAtrValue = new MessageAttributeValue();
 		    // Uncomment to send the messages
 		    //AmazonSNSSample.sendSMSMessage(snsClient, message, phoneNumber, smsAttributes);
 		}
