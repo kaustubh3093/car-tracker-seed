@@ -11,8 +11,9 @@
 	</parent>
   <groupId>io.egen</groupId>
   <artifactId>car-tracker-seed</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+  
   <name>car-tracker-seed</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
@@ -128,6 +129,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <configuration>
+		          <source>1.8</source>
+		          <target>1.8</target>
+		        </configuration>
+		    </plugin>
         </plugins>
     </build>
 

@@ -1,7 +1,7 @@
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 
-COPY ./target/trucker-api-1.0.0.jar /api.jar
+COPY ./target/car-tracker-seed-0.0.1.jar /api.jar
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chmod 755 /docker-entrypoint.sh
