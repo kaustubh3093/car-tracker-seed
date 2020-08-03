@@ -1,6 +1,6 @@
 node {
     
-    def DOCKERHUB_REPO = "ksingh42/car-trucker-api"
+    def DOCKERHUB_REPO = "hub.docker.com/repository/docker/ksingh42/car-trucker-api"
     def DOCKER_SERVICE_ID = "trucker-service"
     def DOCKER_IMAGE_VERSION = ""
 
@@ -29,7 +29,7 @@ node {
     }
 
     stage("docker push") {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub1', passwordVariable: '', usernameVariable: '')]) {
+        withDockerRegistry(credentialsId: 'dockerhub1') {
 			sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
 		}
     }
