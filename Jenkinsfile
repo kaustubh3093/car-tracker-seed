@@ -29,9 +29,12 @@ node {
     }
 
     stage("docker push") {
+        
+        withDockerRegistry(credentialsId: 'dockerhub1') {
             
             sh "docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
         
+        }
     }
 
     stage("docker service") {
