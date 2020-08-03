@@ -21,7 +21,7 @@ node {
     }
     
     stage("mvn install") {
-        sh "mvn install"
+        sh "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
     }
 
     stage("docker build") {
